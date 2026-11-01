@@ -1,0 +1,16 @@
+[Unit]
+Description=Round watch homescreen (lipstick-watch-shell)
+Requires=dbus.socket pre-user-session.target
+After=pre-user-session.target
+Conflicts=lipstick.service
+Before=user-session.target
+
+[Service]
+Type=notify
+EnvironmentFile=-/var/lib/environment/compositor/*.conf
+ExecStart=/usr/bin/lipstick-watch-shell $LIPSTICK_OPTIONS --systemd
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=user-session.target

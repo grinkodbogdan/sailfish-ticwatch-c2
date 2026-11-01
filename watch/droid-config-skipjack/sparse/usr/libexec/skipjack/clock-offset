@@ -1,0 +1,18 @@
+#!/bin/sh
+# The MSM8909 RTC can't be set from Linux but keeps counting while the watch
+# is off. Keep (system time - RTC) in a file and reapply it at boot.
+#   clock-offset save | restore
+STATE=/var/lib/skipjack-clock
+RTC=/sys/class/rtc/rtc0/since_epoch
+[ -r "$RTC" ] || exit 0
+rtc=$(cat $RTC)
+case "$1" in
+save)
+    mkdir -p $STATE
+    echo $(( $(date +%s) - rtc )) > $STATE/offset.new && mv $STATE/offset.new $STATE/offset
+    ;;
+restore)
+    [ -r $STATE/offset ] || exit 0
+    date -u -s "@$(( rtc + $(cat $STATE/offset) ))" >/dev/null
+    ;;
+esac

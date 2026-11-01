@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sailfish OS on TicWatch C2 (skipjack): sailfish-wearable port, reconstructed
+     from the org's repos (their own local_manifests repo was never published). -->
+<manifest>
+  <remote name="sfw"  fetch="https://github.com/sailfish-wearable" />
+  <remote name="mer"  fetch="https://github.com/mer-hybris" />
+
+  <project path="kernel/mobvoi/skipjack" name="android_kernel_mobvoi_skipjack" remote="sfw" revision="hybris-mobvoi-skipjack-pie" />
+  <project path="device/mobvoi/skipjack" name="android_device_mobvoi_skipjack" remote="sfw" revision="master" />
+  <project path="hybris/hybris-patches"  name="hybris-patches"                 remote="sfw" revision="hybris-aosp-msm8909w-pie" />
+  <project path="hybris/hybris-boot"     name="hybris-boot"                    remote="sfw" revision="master" />
+  <project path="hybris/mer-kernel-check" name="mer-kernel-check"              remote="mer" revision="master" />
+  <project path="external/selinux_stubs" name="android_external_selinux_stubs" remote="mer" revision="master" />
+  <project path="external/busybox"       name="android_external_busybox_prebuilt" remote="mer" revision="master" />
+  <project path="rpm"                    name="droid-hal-qualcomm-msm8909w-pie" remote="sfw" revision="master" />
+  <project path="hybris/droid-configs"   name="droid-config-qualcomm-msm8909w-pie" remote="sfw" revision="master" />
+  <project path="hybris/droid-hal-version-skipjack" name="droid-hal-version-qualcomm-msm8909w" remote="sfw" revision="master" />
+</manifest>

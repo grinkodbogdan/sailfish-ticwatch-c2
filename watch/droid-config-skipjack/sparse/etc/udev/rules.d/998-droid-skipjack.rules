@@ -1,0 +1,13 @@
+# FocalTech touch controller (focaltech,fts @ i2c 0x38) -> /dev/touchscreen
+SUBSYSTEM=="input", KERNEL=="event*", ENV{ID_INPUT_TOUCHSCREEN}=="1", SYMLINK+="touchscreen"
+
+# Android partition names (ueventd does this on Android). rmt_storage must find
+# modemst1/modemst2 here, or the modem stalls and subsys-restart resets the SoC.
+SUBSYSTEM=="block", KERNEL=="mmcblk0p*", ENV{PARTNAME}=="?*", SYMLINK+="block/bootdevice/by-name/$env{PARTNAME}"
+
+# GPU / display / binder nodes for lipstick (runs as the device user) and the HALs.
+KERNEL=="kgsl*", MODE="0666"
+KERNEL=="ion", MODE="0666"
+KERNEL=="fb[0-9]*", MODE="0666"
+KERNEL=="binder|hwbinder|vndbinder", MODE="0666"
+KERNEL=="msm_rotator|mdss_rotator|genlock", MODE="0666"

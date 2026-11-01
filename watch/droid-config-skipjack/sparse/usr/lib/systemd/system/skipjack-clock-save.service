@@ -1,0 +1,6 @@
+[Unit]
+Description=Save the RTC offset (periodic)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/skipjack/clock-offset save

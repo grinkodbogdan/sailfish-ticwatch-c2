@@ -1,0 +1,12 @@
+[Unit]
+Description=TicWatch C2 raise to wake and heart rate
+After=droid-hal-init.service dbus.service mce.service
+Requires=dbus.service
+
+[Service]
+ExecStart=/usr/libexec/skipjack/skipjack-sensorhelper
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target

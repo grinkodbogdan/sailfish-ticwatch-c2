@@ -1,0 +1,20 @@
+# sensors.qcom keeps the sensor registry (sns.reg) in /persist/sensors and
+# hosts it for the sensor core on the modem DSP, which waits for it at boot.
+# /persist stays read-only (factory calibration), so overlay just that
+# directory with a writable copy, seeded with the factory registry (sns.reg
+# holds this watch's sensor configuration and calibration).
+[Unit]
+Description=Writable /persist/sensors overlay for the Qualcomm sensor registry
+After=persist.mount
+Requires=persist.mount
+Before=droid-hal-init.service
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'd=/var/lib/skipjack-sensors; mkdir -p $d; for f in sensors_settings sns.reg; do [ -e $d/$f ] || cp -p /persist/sensors/$f $d/; done; chown -R 1000:1000 $d; chmod 660 $d/sns.reg; mountpoint -q /persist/sensors || mount --bind $d /persist/sensors'
+ExecStop=/bin/umount /persist/sensors
+
+[Install]
+WantedBy=droid-hal-init.service

@@ -1,0 +1,15 @@
+[Unit]
+Description=Restore/save the system clock from the RTC offset (read-only MSM8909 RTC)
+DefaultDependencies=no
+After=local-fs.target
+Before=time-sync.target sysinit.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/libexec/skipjack/clock-offset restore
+ExecStop=/usr/libexec/skipjack/clock-offset save
+
+[Install]
+WantedBy=sysinit.target

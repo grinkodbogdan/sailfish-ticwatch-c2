@@ -1,0 +1,4 @@
+# Silica is laid out for 540 px at ratio 1.0; 0.5 fits it to the 360 px round C2 screen.
+[desktop/sailfish/silica]
+theme_pixel_ratio=0.5
+theme_icon_subdir='z1.0'

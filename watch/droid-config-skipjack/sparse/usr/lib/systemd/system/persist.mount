@@ -1,0 +1,14 @@
+# Factory calibration (WiFi NV data, MAC addresses). Read-only: this data is
+# unique to the watch and cannot be recreated.
+[Unit]
+Description=Persist partition (factory calibration)
+Before=droid-hal-init.service
+
+[Mount]
+What=/dev/disk/by-partlabel/persist
+Where=/persist
+Type=ext4
+Options=ro,nosuid,nodev,noexec
+
+[Install]
+WantedBy=local-fs.target

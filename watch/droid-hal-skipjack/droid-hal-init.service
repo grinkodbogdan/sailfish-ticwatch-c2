@@ -1,0 +1,18 @@
+[Unit]
+Description=Android init (hybris): property service, servicemanager, logd and the skipjack HALs
+After=local-fs.target
+Before=basic.target network.target bluetooth.service ofono.service sensorfwd.service lipstick.service
+DefaultDependencies=no
+Conflicts=shutdown.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/touch /dev/.coldboot_done
+# A modem/WCNSS crash should restart that subsystem, not reset the whole watch.
+ExecStartPre=/bin/sh -c 'for f in /sys/bus/msm_subsys/devices/*/restart_level; do echo related > $f; done'
+# Fallback for the udev by-name rule (rmt_storage needs modemst1/2 immediately).
+ExecStartPre=/bin/sh -c 'mkdir -p /dev/block/bootdevice/by-name; for u in /sys/class/block/mmcblk0p*/uevent; do n=$(sed -n s/^PARTNAME=//p $u); d=$(sed -n s/^DEVNAME=//p $u); [ -n "$n" ] && ln -sf /dev/$d /dev/block/bootdevice/by-name/$n; done'
+ExecStart=/usr/libexec/hal-droid/system/bin/init
+
+[Install]
+WantedBy=graphical.target

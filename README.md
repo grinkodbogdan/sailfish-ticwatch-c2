@@ -1,57 +1,36 @@
-# Watch Link
+# Sailfish OS on the TicWatch C2
 
-Companion app for a smartwatch running **Sailfish OS** (built for the TicWatch C2,
-"skipjack"). It talks to the watch over Bluetooth LE using the
-[AsteroidOS](https://asteroidos.org) sync protocol, served on the watch by
-`watch-btsyncd` (asteroid-btsyncd built for Sailfish OS).
+Sailfish OS running on the Mobvoi **TicWatch C2** (codename *skipjack*,
+MSM8909W), with a round watch home screen and a phone companion app.
 
-The UI is a web app (`android/app/src/main/assets/www`, installable as a PWA);
-the Android app hosts it and adds what a web page can't do: a background
-Bluetooth connection, reading the phone's notifications and the playing media.
+```
+companion/   Watch Link: Android companion app (web UI / PWA + native service)
+watch/       the Sailfish OS port: hardware adaptation, round shell, services
+```
 
-## Features
+## What works
 
-| | |
+| Area | Status |
 |---|---|
-| Notifications | Phone notifications appear on the watch and are removed when cleared; per-app mute, vibration strength |
-| Weather | [Open-Meteo](https://open-meteo.com) (no key): current location or a searched city, 5-day forecast, hourly refresh |
-| Music | Now playing on the watch; play/pause, skip, volume from the watch |
-| Time | Watch clock set from the phone on connect and on time-zone/time changes |
-| Battery | Watch battery level in the app and its status notification |
-| Internet | Guided Bluetooth tethering setup (Android only lets the user switch it on) |
+| Display, touch, GPU | ✅ hwcomposer, 360×360 round |
+| Round home screen | ✅ watch face, launcher, quick settings, notifications, watch apps |
+| WiFi | ✅ wcnss/prima, password entry with an on-watch T9 keypad |
+| Bluetooth | ✅ pairing, devices, internet from a phone (Bluetooth tethering) |
+| Phone sync | ✅ notifications, weather, music, time, battery (AsteroidOS protocol) |
+| Sensors | ✅ accelerometer, gyroscope, step counter, heart rate, wrist tilt |
+| Raise to wake | ✅ wrist-tilt gesture |
+| Heart rate | ✅ spot measurement app |
+| Clock | ✅ RTC offset kept across reboots, network/phone time |
+| Vibration, brightness, battery | ✅ |
+| Buttons | ✅ power (display), side button (home/back) |
+| GPS, NFC | ❌ not supported (not on AsteroidOS either) |
+| Audio | — the C2 has no speaker |
 
-## Build
+See [watch/README.md](watch/README.md) for building and flashing, and
+[companion/README.md](companion/README.md) for the app.
 
-Requirements: JDK 17, Android SDK (platform 34, build-tools 34), Gradle 8.7.
+## Licenses
 
-```sh
-cd android
-echo "sdk.dir=$HOME/Android/Sdk" > local.properties
-gradle assembleDebug
-adb install -r app/build/outputs/apk/debug/app-debug.apk
-```
-
-## Pairing notes
-
-- If the phone was paired with the watch before (for example under Wear OS),
-  remove that pairing in the phone's Bluetooth settings first.
-- The app pairs over Bluetooth LE. Pairing over classic Bluetooth and deriving
-  LE keys (what Android does for a plain `createBond()` on a dual-mode device)
-  fails with the watch's Bluetooth stack ("key missing").
-
-## Layout
-
-```
-android/
-  app/src/main/java/org/skipjack/watchlink/
-    WatchService.java          connection, GATT queue, sync logic (foreground service)
-    NotificationForwarder.java notification listener
-    WeatherClient.java         Open-Meteo forecast and city search
-    Protocol.java              watch protocol: UUIDs and encodings
-    MainActivity.java          WebView host and JS bridge (window.Native)
-  app/src/main/assets/www/     web UI / PWA
-```
-
-## Status
-
-Linux support (a desktop service serving the same UI) is planned.
+- `watch/watch-btsyncd`: GPLv3 (AsteroidOS asteroid-btsyncd, see its LICENSE).
+- `watch/lipstick-watch-shell`, `watch/skipjack-sensorhelper`: LGPL-2.1 (SPDX headers).
+- Proprietary Android/vendor binaries are **not** included (see watch/README.md).

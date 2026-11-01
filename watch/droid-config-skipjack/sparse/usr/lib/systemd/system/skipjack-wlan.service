@@ -1,0 +1,13 @@
+[Unit]
+Description=Start the WCNSS WLAN driver (wlan0)
+After=droid-hal-init.service persist.mount
+Requires=persist.mount
+Before=connman.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/libexec/skipjack/wlan-enable
+
+[Install]
+WantedBy=multi-user.target
