@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d1b2a">
+<title>Watch Link</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<main id="app">
+
+  <!-- Watch card: always on top -->
+  <section class="hero">
+    <div class="watch" id="watch">
+      <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r="54" class="ring-bg"/>
+        <circle cx="60" cy="60" r="54" class="ring-fg" id="batteryRing"/>
+      </svg>
+      <div class="face">
+        <div class="face-time" id="faceTime">--:--</div>
+        <div class="face-sub" id="faceBattery"></div>
+      </div>
+    </div>
+    <div class="hero-text">
+      <h1 id="watchName">Watch Link</h1>
+      <p class="status" id="statusLine"><span class="dot"></span><span id="statusText">Starting…</span></p>
+      <p class="error" id="errorLine" hidden></p>
+    </div>
+  </section>
+
+  <!-- First-time setup -->
+  <section id="setup" class="panel" hidden>
+    <h2>Set up your watch</h2>
+    <ol class="steps">
+      <li id="stepPerm">
+        <div><b>Allow Bluetooth and location</b><span>Needed to find the watch and for local weather.</span></div>
+        <button class="btn" data-action="permissions">Allow</button>
+      </li>
+      <li>
+        <div><b>Forget the old pairing</b><span>If this phone was paired with the watch before (for example under Wear OS), remove it in the phone's Bluetooth settings and the Wear OS app first.</span></div>
+        <button class="btn ghost" data-action="bluetoothSettings">Bluetooth settings</button>
+      </li>
+      <li>
+        <div><b>Find the watch</b><span>Keep the watch screen on and Bluetooth enabled on it.</span></div>
+        <button class="btn" data-action="scan" id="scanBtn">Search</button>
+      </li>
+    </ol>
+    <ul class="list" id="foundList"></ul>
+    <p class="hint" id="scanHint" hidden>No watch found yet. Check that Bluetooth is on in the watch's Settings.</p>
+  </section>
+
+  <!-- Tabs -->
+  <section id="tabs" hidden>
+
+    <div class="tab" id="tab-watch">
+      <div class="panel" id="pairingPanel" hidden>
+        <h2>Pairing</h2>
+        <p>Confirm the code on the watch, or type the code the watch shows when the phone asks for it.</p>
+      </div>
+
+      <div class="panel" id="checklist">
+        <h2>Get everything working</h2>
+        <ul class="list">
+          <li class="row" id="chkListener">
+            <div><b>Notifications &amp; music</b><span>Allow notification access so the phone can share notifications and what's playing.</span></div>
+            <button class="btn small" data-action="notificationAccess">Allow</button>
+          </li>
+          <li class="row" id="chkBattery">
+            <div><b>Stay connected</b><span>Let the app run in the background so the link isn't cut.</span></div>
+            <button class="btn small" data-action="batterySettings">Allow</button>
+          </li>
+          <li class="row" id="chkPerm">
+            <div><b>Bluetooth &amp; location</b><span>For the connection and local weather.</span></div>
+            <button class="btn small" data-action="permissions">Allow</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h2>Now playing</h2>
+        <div class="media" id="media">
+          <div class="media-art" aria-hidden="true">♪</div>
+          <div><b id="mediaTitle">Nothing playing</b><span id="mediaArtist"></span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Actions</h2>
+        <div class="grid">
+          <button class="tile" data-action="testNotification"><i>🔔</i>Test notification</button>
+          <button class="tile" data-action="syncTime"><i>🕑</i>Sync time</button>
+          <button class="tile" data-action="refreshWeather"><i>🌤</i>Send weather</button>
+          <button class="tile" data-action="repair"><i>🔗</i>Pair again</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab" id="tab-weather" hidden>
+      <div class="panel weather-now" id="weatherNow">
+        <div class="wx-icon" id="wxIcon">·</div>
+        <div>
+          <div class="wx-temp" id="wxTemp">--°</div>
+          <div class="wx-city" id="wxCity">No forecast yet</div>
+          <div class="wx-meta" id="wxMeta"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Next days</h2>
+        <ul class="days" id="wxDays"></ul>
+        <p class="hint" id="wxUpdated"></p>
+      </div>
+      <div class="panel">
+        <h2>Location</h2>
+        <div class="seg" id="wxMode">
+          <button data-mode="gps">Current location</button>
+          <button data-mode="city">City</button>
+        </div>
+        <div id="citySearch" hidden>
+          <input id="cityInput" type="search" placeholder="Search a city" autocomplete="off">
+          <ul class="list" id="cityResults"></ul>
+        </div>
+        <label class="switch-row"><span>Fahrenheit</span><input type="checkbox" data-setting="fahrenheit"></label>
+        <label class="switch-row"><span>Send weather to the watch</span><input type="checkbox" data-setting="weather"></label>
+        <button class="btn wide" data-action="refreshWeather">Refresh now</button>
+        <p class="hint">Forecasts from Open-Meteo, refreshed every hour.</p>
+      </div>
+    </div>
+
+    <div class="tab" id="tab-alerts" hidden>
+      <div class="panel">
+        <h2>Notifications</h2>
+        <label class="switch-row"><span>Send phone notifications to the watch</span><input type="checkbox" data-setting="notifications"></label>
+        <div class="field-label">Vibration on the watch</div>
+        <div class="seg" id="vibration">
+          <button data-vib="none">Silent</button>
+          <button data-vib="normal">Normal</button>
+          <button data-vib="strong">Strong</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Apps</h2>
+        <p class="hint" id="appsHint">Apps appear here after they post a notification. Switch one off to keep it off the watch.</p>
+        <ul class="list" id="appList"></ul>
+      </div>
+    </div>
+
+    <div class="tab" id="tab-internet" hidden>
+      <div class="panel">
+        <h2>Internet over Bluetooth</h2>
+        <p>The watch can use the phone's mobile data or WiFi through Bluetooth when it has no WiFi of its own. Android only lets you switch this on yourself, so it takes three steps once:</p>
+        <ol class="steps">
+          <li>
+            <div><b>Make the watch visible</b><span>On the watch: Settings → Bluetooth → turn on “Visible to phones”.</span></div>
+          </li>
+          <li>
+            <div><b>Pair it for internet</b><span>Pair the watch in the phone's Bluetooth settings (it appears as TicWatch C2). Confirm the code on both screens.</span></div>
+            <button class="btn ghost" data-action="bluetoothSettings">Bluetooth settings</button>
+          </li>
+          <li>
+            <div><b>Turn on Bluetooth tethering</b><span>In Hotspot &amp; tethering, switch on “Bluetooth tethering”.</span></div>
+            <button class="btn" data-action="tethering">Open tethering</button>
+          </li>
+          <li>
+            <div><b>Use it on the watch</b><span>On the watch: Settings → Bluetooth → tap your phone → “Phone internet”. From then on the watch connects by itself whenever it has no WiFi.</span></div>
+          </li>
+        </ol>
+        <p class="hint">Some phones switch Bluetooth tethering off after a restart — turn it on again here if the watch loses internet.</p>
+      </div>
+    </div>
+
+    <div class="tab" id="tab-more" hidden>
+      <div class="panel">
+        <h2>Sync</h2>
+        <label class="switch-row"><span>Music controls on the watch</span><input type="checkbox" data-setting="music"></label>
+        <label class="switch-row"><span>Set the watch's time from the phone</span><input type="checkbox" data-setting="timeSync"></label>
+      </div>
+      <div class="panel">
+        <h2>Watch</h2>
+        <p class="kv"><span>Name</span><b id="infoName">—</b></p>
+        <p class="kv"><span>Address</span><b id="infoAddress">—</b></p>
+        <p class="kv"><span>Paired</span><b id="infoBonded">—</b></p>
+        <div class="grid two">
+          <button class="btn ghost" data-action="repair">Pair again</button>
+          <button class="btn danger" data-action="forget">Forget watch</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Connection log</h2>
+        <pre class="log" id="log"></pre>
+      </div>
+    </div>
+  </section>
+
+  <p class="browser-note" id="browserNote" hidden>
+    This is the Watch Link web app. To talk to the watch it needs the Android app (Bluetooth,
+    notifications and background sync aren't available to web pages).
+  </p>
+</main>
+
+<nav class="tabbar" id="tabbar" hidden>
+  <button data-tab="watch" class="active"><i>⌚</i>Watch</button>
+  <button data-tab="weather"><i>🌤</i>Weather</button>
+  <button data-tab="alerts"><i>🔔</i>Alerts</button>
+  <button data-tab="internet"><i>🌐</i>Internet</button>
+  <button data-tab="more"><i>⋯</i>More</button>
+</nav>
+
+<script src="app.js"></script>
+</body>
+</html>

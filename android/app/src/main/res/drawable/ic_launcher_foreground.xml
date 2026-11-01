@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Strap -->
+    <path android:fillColor="#2b4a66" android:pathData="M44,22h20l3,12h-26z M41,74h26l-3,12h-20z" />
+    <!-- Round case -->
+    <path android:fillColor="#38c6f4" android:pathData="M54,32a22,22 0 1,1 -0.01,0z" />
+    <path android:fillColor="#0d1b2a" android:pathData="M54,36a18,18 0 1,1 -0.01,0z" />
+    <!-- Hands -->
+    <path android:fillColor="#ffffff" android:pathData="M52.5,42h3v13h-3z M54,52.5l9,5 -1.5,2.6 -9,-5z" />
+    <!-- Link waves -->
+    <path android:strokeColor="#38c6f4" android:strokeWidth="2.5" android:fillColor="#00000000"
+        android:pathData="M80,46a12,12 0 0,1 0,16 M85,41a19,19 0 0,1 0,26" />
+</vector>

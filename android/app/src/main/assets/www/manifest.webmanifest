@@ -1,0 +1,10 @@
+{
+  "name": "Watch Link",
+  "short_name": "Watch Link",
+  "description": "Companion for the Sailfish OS watch: notifications, weather, music, time and internet over Bluetooth.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0d1b2a",
+  "theme_color": "#0d1b2a",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
