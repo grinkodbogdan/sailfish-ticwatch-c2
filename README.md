@@ -8,6 +8,18 @@ companion/   Watch Link: Android companion app (web UI / PWA + native service)
 watch/       the Sailfish OS port: hardware adaptation, round shell, services
 ```
 
+## Screenshots
+
+Taken on the watch (360×360, round). Sample notifications and weather city; nearby network and device names are pixelated.
+
+| | | |
+|:-:|:-:|:-:|
+| <img src="docs/screenshots/01-face.png" width="220" alt="Watch face"><br>Watch face | <img src="docs/screenshots/02-face-analog.png" width="220" alt="Analog face"><br>Analog face | <img src="docs/screenshots/03-launcher.png" width="220" alt="App list"><br>App list |
+| <img src="docs/screenshots/04-quick-settings.png" width="220" alt="Quick settings"><br>Quick settings | <img src="docs/screenshots/15-notification-popup.png" width="220" alt="Notification from the phone"><br>Notification from the phone | <img src="docs/screenshots/05-notifications.png" width="220" alt="Notifications"><br>Notifications |
+| <img src="docs/screenshots/06-settings.png" width="220" alt="Settings"><br>Settings | <img src="docs/screenshots/07-wifi.png" width="220" alt="WiFi"><br>WiFi | <img src="docs/screenshots/08-bluetooth.png" width="220" alt="Bluetooth"><br>Bluetooth |
+| <img src="docs/screenshots/09-display.png" width="220" alt="Display"><br>Display | <img src="docs/screenshots/10-heart-rate.png" width="220" alt="Heart rate"><br>Heart rate | <img src="docs/screenshots/11-ambience.png" width="220" alt="Ambiences"><br>Ambiences |
+| <img src="docs/screenshots/12-clock.png" width="220" alt="Clock"><br>Clock | <img src="docs/screenshots/13-battery.png" width="220" alt="Battery"><br>Battery |  |
+
 ## What works
 
 | Area | Status |
